@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+    <title>Farmacia</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#mostrarNavegacion').click(function () {
+                $('#navegador').toggle();
+            });
+        
+            $('.desplegable > a').click(function (event) {
+                event.preventDefault(); 
+                $(this).parent().toggleClass('abierto');
+                $(this).siblings('.sub-menu').toggle(); 
+            });
+        
+            $(document).on('click', function (event) {
+                if (!$(event.target).closest('#navegador').length && !$(event.target).is('#mostrarNavegacion')) {
+                    $('.sub-menu').hide(); 
+                }
+            });
+        });      
+    </script>
+</head>
+
+<body>
+    
+    <div id="barraSuperior">
+        <span id="mostrarNavegacion" class="icono-tres-puntos">&#9776;</span>
+        <a href="{% url 'cerrar_sesion' %}" class="cerrar-sesion">Cerrar Sesión</a>
+    </div>
+    <div id="navegador">
+        <img src="{% static 'images/Logo.png'%}" alt="Logo">
+        <nav>
+            <ul>
+                <li class="desplegable">
+                    <a id="texto" href="#">Categorias</a>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <ul class="sub-menu">
+                        <li>
+                            <a id="texto" href="{% url 'agregar_tipo_producto' %}">Agregar</a>
+                        </li>
+                        <li>
+                            <a id="texto" href="{% url 'mostrar_tipos_productos' %}">Mostrar</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="desplegable">
+                    <a id="texto" href="#">Productos</a>
+                    <ul class="sub-menu">
+                        <li>
+                            <a id="texto" href="{% url 'listar_productos' %}">Listas</a>
+                        </li>
+                        <li>
+                            <a id="texto" href="{% url 'registrar_producto' %}">Registrar</a>
+                            <li>
+                                <a id="texto" href="{% url 'alertas_productos' %}">Inventario Bajo</a>
+                                
+                            </li> 
+                        </li>
+                    </ul>
+                </li>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+
+                <li class="desplegable">
+                    <a id="texto" href="#">Ventas</a>
+                    <ul class="sub-menu">
+                        <li>
+                            <a id="texto" href="{% url 'venta' %}">Ventas</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    
+    
+    <div id="contenido">
+        {% block content %}
+    
+        {% endblock %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const flechas = document.querySelectorAll('.flecha');
+
+            flechas.forEach(function (flecha) {
+                flecha.addEventListener('click', function () {
+                    const subMenu = flecha.parentElement.querySelector('.sub-menu');
+                    subMenu.style.display = subMenu.style.display === 'block' ? 'none' : 'block';
+                });
+            });
+        });
+    </script><script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    {% if messages %}
+      {% for m in messages %}
+        <script>
+           function mostrarAlerta() {
+        Swal.fire({
+          title: "Alerta",
+          text: "{{m}}",
+          icon: "warning",
+        });
+      }
+
+      // Llama a la función para mostrar la alerta inicialmente
+      mostrarAlerta();
+
+     
+      setInterval(mostrarAlerta, 10000); 
+        </script>
+      {% endfor %}
+    {% endif %}
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
+body {
+    background-image: url(../images/drogueria.jpeg);
+    background-color: #f0f0f0;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+.registro-container {
+    justify-content: center;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 40px;
+    border-radius: 10px;
+    background-color: rgba(2, 57, 255, 0.5);
+    box-shadow: 0 0 10px rgba(124, 122, 123, 0.2);
+    border: 2px solid black;
+    box-shadow: 10px 10px 10px #464545;
+}
+
+h1 {
+    text-align: center;
+    color: #050505;
+    border-radius: 10px;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+label {
+    max-width: 400px;
+    padding: 10px;
+    border-radius: 10px;
+    display: block;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    justify-content: center;
+    width: 95%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    box-shadow: 10px 10px 10px #464545;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+button[type="submit"] {
+    justify-content: center;
+    width: 100%;
+    padding: 10px;
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px #999;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+button[type="submit"]:hover {
+    justify-content: center;
+    background-color: #000000;
+}
+
+.l {
+    position: absolute;
+    top: 18px;
+    width: 100px;
+    height: 100px;
+    border-radius: 20px;
+    border: 1px solid #000000;
+    transform: translateX(150px);
+    box-shadow: 2px 2px 5px #504d4d;
+}
+
+.C {
+    border-radius: 15px;
+    background-color: #e0a9a0;
+    width: 100%;
+    padding: 2px;
+}
+
+.password-container {
+    position: relative;
+    width: 95%;
+}
+
+.password-container input {
+    padding-right: 30px;
+}
+
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 1px;
+    transform: translateY(-50%);
+    outline: none;
+}
+
+
+.input-container {
+    width: 190%;
+    position: relative;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.toggle-password-icon {
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 15px;
+}
+
+#confirmar-contrasena-label {
+    display: block;
+    margin-top: 10px;
+}
+
+/* Estilo para el select */
+#email_domain {
+    width: 100%;
+    padding: 5px;
+    border-radius: 10px;
+    outline: none;
+    background-color: #7086d1;
+    cursor: pointer;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+.f{
+    font-family: 'Josefin Sans', sans-serif;
+
+}
+
+a{
+    color: #ffffff;
+}

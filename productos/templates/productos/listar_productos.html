@@ -1,0 +1,99 @@
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Listar Productos</title>
+    <link rel="stylesheet" href="{% static 'css/buscador.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+    {% include 'index.html' %}
+    <style>
+        #tablaProductos {
+            width: 100%; /* Establece el ancho en 100% para ocupar todo el espacio disponible */
+            transition: width 0.3s; /* Mantén la transición para un efecto suave */
+        }
+    </style>
+
+    <h1>Listado de Productos</h1>
+
+    <table id="tablaProductos">
+        <tr>
+            <th>ID Producto</th> 
+            <th>Nombre</th>
+            <th>Precio Costo</th>  <!-- Add new header for Precio Costo -->
+            <th>Precio Venta</th>  <!-- Add new header for Precio Venta -->
+            <th>Precio Mayor</th>  <!-- Add new header for Precio Mayor -->
+            <th>Inventario</th>  <!-- Update header for Inventario -->
+            <th>Inventario Mínimo</th>  <!-- Add new header for Inventario Mínimo -->
+            <th>Categoria</th> 
+            <th>Detalles</th>
+        </tr>
+        {% for producto in productos %}
+            <tr>
+                <td>{{ producto.id_producto }}</td> 
+                <td>{{ producto.nombre }}</td>
+                <td>${{ producto.precio_costo }}</td>  <!-- Add new cell for Precio Costo -->
+                <td>${{ producto.precio_venta }}</td>  <!-- Add new cell for Precio Venta -->
+                <td>${{ producto.precio_mayor }}</td>  <!-- Add new cell for Precio Mayor -->
+                <td>{{ producto.cantidad_inventario }}</td>
+                <td>{{ producto.inventario_minimo }}</td>  <!-- Add new cell for Inventario Mínimo -->
+                <td>{{ producto.tipo.nombre }}</td>
+                <td><a href="{% url 'detalle_producto' producto.id_producto %}" style="text-decoration: none;">👁️</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <div id="formularioBusqueda">
+        <form action="{% url 'buscar_productos' %}" method="get">
+            <input type="text" name="consulta" placeholder="Buscar Productos">
+            <button type="submit">Buscar</button>
+        </form>
+    </div>
+
+    <script>
+        function eliminarProducto(event) {
+            event.preventDefault();
+
+            Swal.fire({
+                title: '¿Estás seguro de que deseas eliminar este producto?',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, Eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('eliminarForm').submit();
+                }
+            });
+        }
+        const tablaProductos = document.getElementById('tablaProductos');
+        const contenidoTabla = document.getElementById('contenidoTabla');
+        const mostrarNavegacion = document.getElementById('mostrarNavegacion');
+        const navegacion = document.getElementById('navegador');
+
+        navegacion.style.width = '150px';
+        tablaProductos.style.width = '90%';
+
+        mostrarNavegacion.addEventListener('click', function (event) {
+            event.preventDefault();
+
+            if (navegacion.style.width === '150px') {
+                navegacion.style.width = '0';
+                tablaProductos.style.width = '100%';
+                tablaProductos.classList.remove('tabla-navegacion-abierta');
+                contenidoTabla.classList.remove('tabla-navegacion-abierta');
+            } else {
+                navegacion.style.width = '150px';
+                tablaProductos.style.width = 'calc(100% - 150px)';
+                tablaProductos.classList.add('tabla-navegacion-abierta');
+                contenidoTabla.classList.add('tabla-navegacion-abierta');
+            }
+        });
+    </script>
+</body>
+
+</html>
+{% endblock content %}

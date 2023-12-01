@@ -1,0 +1,47 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de Ventas</title>
+    <link rel="stylesheet" href="{% static 'css/ventas.css' %}">
+</head>
+<body>
+    {% include 'index.html' %}
+    <div class="container">
+        <h1>Listado de Ventas</h1>
+
+        {% if ventas %}
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>ID Venta</th>
+                        <th>Fecha Venta</th>
+                        <th>Finalizada</th>
+                        <th>Total</th>
+                        <th>Productos Vendidos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for venta in ventas %}
+                        <tr>
+                            <td>{{ venta.id }}</td>
+                            <td>{{ venta.fecha }}</td>
+                            <td>{{ venta.estado }}</td>
+                            <td>{{ venta.total }}</td>
+                            <td>
+                                {% for transaccion in venta.productos %}
+                                    {{ transaccion.nombre }} - {{ transaccion.cantidad }}<br>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No hay ventas registradas.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

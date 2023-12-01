@@ -1,0 +1,118 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/registro.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Registro</title>
+</head>
+<body>
+    <div class="registro-container">
+        <br>
+        <div class="registro-box">
+            <h1>Registro</h1>
+            <form method="post" action="{% url 'registro' %}">
+                {% csrf_token %}
+                <div>
+                    <label for="username">Nombre de usuario:</label>
+                    <input type="text" id="username" name="username" required><br><br>
+                    <label for="email">Correo electrónico:</label>
+                    <input type="text" id="email" name="email">
+                    <select name="email_domain" id="email_domain" onchange="completeEmail()">
+                        <option value="">Selecciona un dominio</option>
+                        <option value="gmail.com">gmail.com</option>
+                        <option value="hotmail.com">hotmail.com</option>
+                    </select>
+                </div>
+                <br><br>
+                <label for="password1">Contraseña:</label>
+                <div class="password-container">
+                    <input type="password" id="password1" name="password1" required>
+                    <span class="password-toggle" id="toggle-password1" onclick="togglePasswordVisibility('password1', 'toggle-password1')">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
+                <div id="password-validation1" style="color: red;"></div>
+                <br><br>
+
+                <label for="password2">Confirmar contraseña:</label>
+                <div class="password-container">
+                    <input type="password" id="password2" name="password2" required>
+                    <span class="password-toggle" id="toggle-password2" onclick="togglePasswordVisibility('password2', 'toggle-password2')">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
+                <div id="password-validation2" style="color: red;"></div>
+                <br><br>
+
+                <button type="submit" id="registro-button" disabled>Registrarse</button>
+            </form>
+            <p class="f">¿Ya tienes una cuenta? <a href="{% url 'login' %}">Inicia sesión</a></p>
+        </div>
+    </div>
+    <script>
+        function completeEmail() {
+            var email = document.getElementById("email");
+            var emailDomain = document.getElementById("email_domain").value;
+            var parts = email.value.split('@');
+            var username = parts[0];
+            email.value = username + "@" + emailDomain;
+        }
+
+        function togglePasswordVisibility(inputId, toggleId) {
+            var passwordInput = document.getElementById(inputId);
+            var toggleIcon = document.getElementById(toggleId);
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+            } else {
+                passwordInput.type = 'password';
+            }
+        }
+
+        document.getElementById("password1").addEventListener("input", validarContraseña);
+        document.getElementById("password2").addEventListener("input", validarContraseña);
+
+        function validarContraseña() {
+            var contraseña1 = document.getElementById("password1").value;
+            var contraseña2 = document.getElementById("password2").value;
+            var mensajeValidación1 = document.getElementById("password-validation1");
+            var mensajeValidación2 = document.getElementById("password-validation2");
+            var botonRegistro = document.getElementById("registro-button");
+
+            var tieneMayuscula = /[A-Z]/.test(contraseña1);
+            var tieneNumero = /\d/.test(contraseña1);
+            var tieneAsterisco = /\*/.test(contraseña1);
+
+            if (tieneMayuscula && tieneNumero && tieneAsterisco) {
+                mensajeValidación1.textContent = "Contraseña válida.";
+                mensajeValidación1.style.color = "green";
+                mensajeValidación1.style.marginTop = "10px";
+                mensajeValidación1.style.fontFamily = 'Josefin Sans, sans-serif';
+            } else {
+                mensajeValidación1.textContent = "La contraseña debe contener al menos una letra mayúscula, un número y un asterisco (*).";
+                mensajeValidación1.style.color = "red";
+                mensajeValidación1.style.marginTop = "20px";
+                mensajeValidación1.style.fontFamily = 'Josefin Sans, sans-serif';
+            }
+
+            if (contraseña1 === contraseña2) {
+                mensajeValidación2.textContent = "Las contraseñas coinciden.";
+                mensajeValidación2.style.color = "green";
+                mensajeValidación2.style.marginTop = "10px";
+                mensajeValidación2.style.fontFamily = 'Josefin Sans, sans-serif';
+                botonRegistro.disabled = false;
+            } else {
+                mensajeValidación2.textContent = "Las contraseñas no coinciden.";
+                mensajeValidación2.style.color = "red";
+                mensajeValidación2.style.marginTop = "20px";
+                mensajeValidación2.style.fontFamily = 'Josefin Sans, sans-serif';
+                botonRegistro.disabled = true;
+            }
+        }
+    </script>
+</body>
+</html>

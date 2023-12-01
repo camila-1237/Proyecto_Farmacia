@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/no_se.css' %}">
+    <title>No se puede eliminar</title>
+</head>
+<body>
+    <br>
+    <br>
+    <br>
+    <br>
+    {% include 'index.html' %}
+    <table>
+        <tr>
+            <th colspan="2">No se puede eliminar el tipo de producto "{{ tipo_producto.nombre }}"</th>
+        </tr>
+        <tr>
+            <td colspan="2">Este tipo de producto tiene productos asociados y no se puede eliminar.</td>
+        </tr>
+
+        <tr>
+            <th>Productos asociados:</th>
+        </tr>
+        {% for producto in productos_asociados %}
+            <tr>
+                <td>{{ producto.nombre }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <div style="text-align: center;">
+        <a href="{% url 'mostrar_tipos_productos' %}">Volver</a>
+    </div>
+</body>
+</html>

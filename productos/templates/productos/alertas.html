@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>Alertas de Inventario</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/alertas.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+    
+    {% include 'index.html' %}
+
+    {% block content %}
+    <h1>Productos Próximos a Vencer</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre del Producto</th>
+                <th>Fecha de Caducidad</th>
+                <th>Detalles</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos_proximos_a_vencer %}
+            <tr>
+                <td>{{ producto.nombre }}</td>
+                <td>{{ producto.fecha_caducidad|date:"d/m/Y" }}</td>
+                <td><a href="{% url 'detalle_producto' producto.id_producto %}" style="text-decoration: none;">👁️</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h1>Productos Bajos en Inventario</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre del Producto</th>
+                <th>Cantidad en Inventario</th>
+                <th>Detalles</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos_inventario_bajo %}
+            <tr>
+                <td>{{ producto.nombre }}</td>
+                <td>{{ producto.cantidad_inventario }}</td>
+                <td><a href="{% url 'detalle_producto' producto.id_producto %}" style="text-decoration: none;">👁️</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endblock %}
+
+    
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                title: 'Alertas de Inventario',
+                html: '<h3>Productos Próximos a Vencer:</h3><ul>{% for producto in productos_proximos_a_vencer %}<li>{{ producto.nombre }} (Fecha de Caducidad: {{ producto.fecha_caducidad|date:"d/m/Y" }}) <a href="{% url "detalle_producto" producto.id_producto %}" style="text-decoration: none;">👁️</a></li>{% endfor %}</ul><h3>Productos Bajos en Inventario:</h3><ul>{% for producto in productos_inventario_bajo %}<li>{{ producto.nombre }} (Cantidad en Inventario: {{ producto.cantidad_inventario }}) <a href="{% url "detalle_producto" producto.id_producto %}" style="text-decoration: none;">👁️</a></li>{% endfor %}</ul>',
+                icon: 'warning',
+                showCloseButton: true,  
+            });
+        });
+    </script>
+    
+</body>
+</html>

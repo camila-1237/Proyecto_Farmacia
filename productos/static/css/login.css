@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
+body {
+    background-image: url(../images/drogueria.jpeg);
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    color: #000000;
+    font-weight: bold;
+}
+
+.login-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 40px;
+    background-color: rgba(2, 57, 255, 0.5);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(143, 6, 6, 0.2);
+    border: 2px solid black;
+    box-shadow: 10px 10px 10px #464545;
+}
+
+.login-box {
+    max-width: 400px;
+    padding: -30px;
+
+}
+
+h1 {
+    color: #000000;
+    text-align: center;
+    font-size: 25px;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 95%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    box-shadow: 10px 10px 10px #464545;
+}
+
+button[type="submit"] {
+    width: 101%;
+    padding: 10px;
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px #999;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+button[type="submit"]:hover {
+    background-color: #000000;
+    font-family: 'Josefin Sans', sans-serif;
+}
+.l{
+    position: static;
+    position: absolute;
+    position: center;
+    top: 175px;
+    width: 100px;
+    height: 100px;
+    border-radius: 35%;
+    border: 1px solid #000000;
+    transform: translateX(590px);
+    box-shadow: 2px 2px 5px #504d4d;
+    
+}
+
+h6{
+    color: rgb(0, 0, 0);
+    text-align: center;
+    font-size: 25px;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+.password-container {
+    position: relative;
+    width: 95%;
+}
+
+#password {
+    padding-right: 30px; /* Ajusta el espaciado a la derecha del campo de contraseña */
+}
+
+#toggle-password {
+    position: absolute;
+    top: 50%;
+    right: -10px; 
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+.d{
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+p{
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+a{
+    color: #ffffff;
+}

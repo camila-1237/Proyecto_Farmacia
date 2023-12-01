@@ -1,0 +1,99 @@
+{% block content %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="stylesheet" href="{% static 'css/detalles.css' %}">
+    <!-- Agrega el enlace al archivo JavaScript de SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        #tablaProductos {
+            width: 100%; /* Establece el ancho en 100% para ocupar todo el espacio disponible */
+            transition: width 0.3s; /* Mantén la transición para un efecto suave */
+        }
+    </style>
+</head>
+<body>
+    {% include 'index.html' %}
+    <h1>Detalles de Productos</h1>
+    <table id="tablaProductos">
+        <tr>
+            <th>ID Producto</th> 
+            <th>Nombre</th>
+            <th>Cod. Barras</th>
+            <th>Precio Costo</th>  <!-- Add new header for Precio Costo -->
+            <th>Precio Venta</th>  <!-- Add new header for Precio Venta -->
+            <th>Precio Mayor</th>  <!-- Add new header for Precio Mayor -->
+            <th>Fecha de Caducidad</th>
+            <th>Cant. Inventario</th>
+            <th>Inventario Mínimo</th>  <!-- Add new header for Inventario Mínimo -->
+            <th>Categoria</th>
+            <th>Acciones</th>
+        </tr>
+        <tr>
+            <td>{{ producto.id_producto }}</td> 
+            <td>{{ producto.nombre }}</td>
+            <td>{{ producto.codigo_barras }}</td>
+            <td>${{ producto.precio_costo }} COP</td>  <!-- Add new cell for Precio Costo -->
+            <td>${{ producto.precio_venta }} COP</td>  <!-- Add new cell for Precio Venta -->
+            <td>${{ producto.precio_mayor }} COP</td>  <!-- Add new cell for Precio Mayor -->
+            <td>{{ producto.fecha_caducidad|date:"M. d, Y" }}</td>
+            <td>{{ producto.cantidad_inventario }}</td>
+            <td>{{ producto.inventario_minimo }}</td>  <!-- Add new cell for Inventario Mínimo -->
+            <td>{{ producto.tipo.nombre }}</td>
+            <td>
+                <form id="eliminarForm" method="POST" action="{% url 'eliminar_producto' producto.id_producto %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="producto_id" value="{{ producto.id }}">
+                    <a href="{% url 'modificar_producto' producto.id_producto %}" class="La">🖊️</a>
+                    <a href="#" onclick="eliminarProducto(event)" class="B">🗑</a>
+                </form>
+            </td>
+        </tr>
+    </table>
+    <script>
+        function eliminarProducto(event) {
+            event.preventDefault();
+            
+            Swal.fire({
+                title: '¿Estás seguro de que deseas eliminar este producto?',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, Eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('eliminarForm').submit();
+                }
+            });
+        } 
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const tablaProductos = document.getElementById('tablaProductos');
+            const contenidoTabla = document.getElementById('contenidoTabla');
+            const mostrarNavegacion = document.getElementById('mostrarNavegacion');
+            const navegacion = document.getElementById('navegador');
+            
+            navegacion.style.width = '150px';
+            tablaProductos.style.width = '90%';
+            
+            mostrarNavegacion.addEventListener('click', function (event) {
+                event.preventDefault();
+            
+                if (navegacion.style.width === '150px') {
+                    navegacion.style.width = '0';
+                    tablaProductos.style.width = '100%';
+                    tablaProductos.classList.remove('tabla-navegacion-abierta');
+                    contenidoTabla.classList.remove('tabla-navegacion-abierta');
+                } else {
+                    navegacion.style.width = '150px';
+                    tablaProductos.style.width = 'calc(100% - 150px)'; 
+                    tablaProductos.classList.add('tabla-navegacion-abierta');
+                    contenidoTabla.classList.add('tabla-navegacion-abierta');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+{% endblock content %}

@@ -1,0 +1,28 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/modificar.css' %}">
+    <title>Document</title>
+</head>
+<body>
+    {% include 'index.html' %}
+    <h1>Modificar Categoria</h1>
+
+    <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <input type="submit" value="Guardar Cambios">
+    </form>
+
+    <a href="{% url 'mostrar_tipos_productos' %}">Cancelar</a>
+</body>
+</html>
+{% block content %}
+
+{% endblock %}

@@ -1,0 +1,52 @@
+/* modificar.css */
+
+/* Estilo para el título */
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+/* Estilo para el formulario */
+form {
+    width: 40%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+/* Estilo para los elementos del formulario */
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+input[type="text"] {
+    width: 95%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #000000;
+    border-radius: 10px;
+}
+
+input[type="submit"] {
+    background-color: #000000;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+input[type="submit"]:hover {
+    background-color: #000000;
+}
+
+
+
+a:hover {
+    background-color: #000000;
+}

@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tipos de Productos</title>
+    <link rel="stylesheet" href="{% static 'css/agregar.css' %}">
+</head>
+<body>
+    {% include 'index.html' %}
+    <h1>Agregar Categoria</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="container">
+        <table>
+            <tr>
+                <th>Nombre:</th>
+                <td><input type="text" name="nombre" required></td>
+            </tr>
+        </table>
+        </div>
+        <div class="boton">
+        <button type="submit">Agregar</button>
+        </div>
+    </form>
+    
+</body>
+</html>
+{% block content %}
+
+{% endblock %}

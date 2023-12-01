@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema POS de Farmacia</title>
+    <link rel="stylesheet" href="{% static 'css/ventas.css' %}">
+</head>
+<body>
+    {% include 'index.html' %}
+    <div class="container">
+        <h1>Venta</h1>
+        <input type="text" id="buscador" placeholder="Buscar producto">
+        <ul id="lista-productos">
+            {% for producto in productos %}
+                <li class="producto" data-id="{{ producto.id_producto }}" data-precio="{{ producto.precio }}">
+                    {{ producto.nombre }} - ${{ producto.precio }}
+                </li>
+            {% endfor %}
+        </ul>
+    
+        <h2>Transacción</h2>
+        <strong id="transaccion"></strong>
+        <p id="total"></p>
+        <input type="number" id="pago" placeholder="Monto en efectivo">
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" id="producto_id" name="producto_id">
+            <button type="submit" id="finalizar">Finalizar Venta</button>
+        </form>
+    </div>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modal-nombre"></h2>
+            <p id="modal-precio"></p>
+            <label for="modal-cantidad">Cantidad:</label>
+            <input type="number" id="modal-cantidad" value="1" min="1">
+            <div class="cantidad-selector">
+                <button class="cantidad-btn">1</button>
+                <button class="cantidad-btn">2</button>
+                <button class="cantidad-btn">3</button>
+                <button class="cantidad-btn">4</button>
+                <button class="cantidad-btn">5</button>
+                <button class="cantidad-btn">6</button>
+                <button class="cantidad-btn">7</button>
+                <button class="cantidad-btn">8</button>
+                <button class="cantidad-btn">9</button>
+                <button class="cantidad-btn">0</button>
+            </div>
+            <button id="agregar-modal">Agregar</button>
+            <button id="editar-modal" style="display: none;">Editar</button>
+        </div>
+    </div>
+    
+    <script src="{% static 'js/Pos.js' %}"></script>
+</body>
+</html>

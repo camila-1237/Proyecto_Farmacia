@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Agregar Transacción</title>
+    <style>
+        .transaccion {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    {% include 'index.html' %}
+    <br>
+    <br>
+    <br>
+    <h1>Agregar Transacción a la Venta {{ venta.id_venta }}</h1>
+    
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div id="transacciones">
+
+        </div>
+        
+        <button type="button" onclick="agregarTransaccion()">Agregar Transacción</button>
+        <button type="button" onclick="finalizarTodas()">Finalizar Todas las Transacciones</button>
+        
+        <input type="submit" style="display:none;"> 
+    </form>
+    
+    <script>
+        function agregarTransaccion() {
+            var transaccionesDiv = document.getElementById('transacciones');
+            
+            var nuevaTransaccion = document.createElement('div');
+            nuevaTransaccion.classList.add('transaccion');
+            
+            nuevaTransaccion.innerHTML = `
+                {{ transaccion_form.id_producto.label_tag }} 
+                <select name="id_producto">
+                    {% for producto in transaccion_form.fields.id_producto.queryset %}
+                        <option value="{{ producto.id }}">{{ producto.nombre }}</option>
+                    {% endfor %}
+                </select>
+                {{ transaccion_form.cantidad.label_tag }} {{ transaccion_form.cantidad }}
+                {{ transaccion_form.finalizada }} Finalizar Transacción
+                <button type="button" onclick="eliminarTransaccion(this)">Eliminar</button>
+            `;
+            
+            transaccionesDiv.appendChild(nuevaTransaccion);
+        }
+
+        function eliminarTransaccion(botonEliminar) {
+            var transaccion = botonEliminar.parentElement;
+            transaccion.remove();
+        }
+
+        function finalizarTodas() {
+            var transacciones = document.querySelectorAll('.transaccion');
+            transacciones.forEach(function(transaccion) {
+                var checkbox = transaccion.querySelector('input[type="checkbox"]');
+                checkbox.checked = true;
+            });
+            document.querySelector('input[type="submit"]').click();
+        }
+    </script>
+        
+</body>
+</html>

@@ -1,0 +1,84 @@
+{% load static %}
+
+{% block content %}
+
+{% endblock %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tipos de Productos</title>
+    <link rel="stylesheet" href="{% static 'css/tablas.css' %}">
+    <!-- Agrega el enlace al archivo JavaScript de SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    {% include 'index.html' %}
+    <h1>Tipos de Categorias</h1>
+    <div class="container">
+        <table>
+            <tr>
+                <th>Categoria</th>
+                <th>Opciones</th>
+            </tr>
+            {% for tipo in tipos_productos %}
+                <tr>
+                    <td>{{ tipo.nombre }}</td>
+                    <td>
+                        <a href="{% url 'modificar_tipo_producto' tipo.id %}" class="L icon-link">🖊️</a>
+                        <form id="eliminarForm{{ tipo.id }}" method="POST" action="{% url 'eliminar_tipo_producto' tipo.id %}" class="icon-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="tipo_id" value="{{ tipo.id }}">
+                            <a href="#" onclick="eliminarItem(event, 'eliminarForm{{ tipo.id }}', 'categoria')" class="Borrar">🗑</a>
+                        </form>
+                    </td>
+                    
+                </tr>
+            {% endfor %}
+        </table>
+        <div id="formularioBusqueda">
+            <form action="{% url 'buscar_productos' %}" method="get">
+                <input type="text" name="consulta" placeholder="Buscar Productos">
+                <button type="submit">Buscar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function eliminarItem(event, formId, itemType) {
+            event.preventDefault();
+
+            Swal.fire({
+                title: `¿Estás seguro de que deseas eliminar este ${itemType}?`,
+                showCancelButton: true,
+                confirmButtonText: 'Sí, Eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(formId).submit();
+                }
+            });
+        }
+
+        function eliminarCategoria(event, tipo_id) {
+            event.preventDefault();
+
+            // Aquí puedes agregar una verificación si la categoría está asociada a algún producto.
+            let confirmacion;
+
+            // Supongamos que la variable 'categoriaAsociada' indica si la categoría está asociada a algún producto.
+            // Puedes ajustar esto según tu lógica real.
+            let categoriaAsociada = false;
+
+            if (categoriaAsociada) {
+                confirmacion = confirm("Esta categoría está asociada a productos. ¿Deseas eliminarla de todos modos?");
+            } else {
+                confirmacion = confirm("¿Estás seguro de que deseas eliminar esta categoria?");
+            }
+
+            if (confirmacion) {
+                document.getElementById('eliminarForm' + tipo_id).submit();
+            }
+        }
+    </script>
+</body>
+</html>

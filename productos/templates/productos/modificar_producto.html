@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Modificar Producto</title>
+    <link rel="stylesheet" href="{% static 'css/listas.css' %}">
+</head>
+
+<body>
+    {% include 'index.html' %}
+    <h1>Modificar Producto</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar Cambios</button>
+    </form>
+    {% block content %}
+
+    {% endblock %}
+</body>
+</html>

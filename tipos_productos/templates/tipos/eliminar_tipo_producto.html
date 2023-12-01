@@ -1,0 +1,35 @@
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminar Categoria</title>
+    <link rel="stylesheet" href="{% static 'css/tablas.css' %}">
+</head>
+<body>
+    {% include 'index.html' %}
+    <form id="eliminarForm" action="{% url 'eliminar_tipo_producto' tipo_producto.id %}" method="post">
+        {% csrf_token %}
+        <h1>Eliminar Categoria</h1>
+        <p>¿Estás seguro de que deseas eliminar esta categoria? "{{ tipo_producto.nombre }}"?</p>
+        <button type="submit">Eliminar</button>
+    </form>    
+    <script>
+        document.getElementById('eliminarForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            let confirmacion = confirm("¿Estás seguro de que deseas eliminar esta categoria?");
+            if (confirmacion) {
+                this.submit();
+            } else {
+                window.location.href = "{% url 'mostrar_tipos_productos' %}";            }
+        });
+    </script>
+    
+
+</body>
+</html>
+
+{% endblock %}

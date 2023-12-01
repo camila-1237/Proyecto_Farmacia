@@ -1,0 +1,77 @@
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resultado de la búsqueda</title>
+    <link rel="stylesheet" href="{% static 'css/buscado.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        #tablaProductos {
+            width: 100%;
+            transition: width 0.3s;
+        }
+        .tabla-navegacion-abierta {
+            width: calc(100% - 150px);
+        }
+    </style>
+</head>
+<body>
+    {% include 'index.html' %}
+    <h1>Resultados de la búsqueda</h1>
+    <table id="tablaProductos">
+        <tr>
+            <th>ID Producto</th>  <!-- Add new header for ID Producto -->
+            <th>Nombre</th>
+            <th>Codigo de barras</th>
+            <th>Precio Costo</th>
+            <th>Precio Venta</th>
+            <th>Precio Mayor</th>
+            <th>Fecha de caducidad</th>
+            <th>Cantidad en el inventario</th>
+            <th>Inventario Mínimo</th>
+            <th>Categoria de productos</th>
+        </tr>
+        {% for producto in resultados %}
+            <tr>
+                <td>{{ producto.id_producto }}</td>  <!-- Add new cell for ID Producto -->
+                <td>{{ producto.nombre }}</td>
+                <td>{{ producto.codigo_barras }}</td>
+                <td>{{ producto.precio_costo }}</td>
+                <td>{{ producto.precio_venta }}</td>
+                <td>{{ producto.precio_mayor }}</td>
+                <td>{{ producto.fecha_caducidad }}</td>
+                <td>{{ producto.cantidad_inventario }}</td>
+                <td>{{ producto.inventario_minimo }}</td>
+                <td>{{ producto.tipo }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const tablaProductos = document.getElementById('tablaProductos');
+            const mostrarNavegacion = document.getElementById('mostrarNavegacion');
+            const navegacion = document.getElementById('navegador');
+
+            navegacion.style.width = '150px';
+            tablaProductos.style.width = '100%';
+
+            mostrarNavegacion.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                if (navegacion.style.width === '150px') {
+                    navegacion.style.width = '0';
+                    tablaProductos.style.width = '100%';
+                    tablaProductos.classList.remove('tabla-navegacion-abierta');
+                } else {
+                    navegacion.style.width = '150px';
+                    tablaProductos.style.width = 'calc(100% - 150px)';
+                    tablaProductos.classList.add('tabla-navegacion-abierta');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+{% endblock content %}
