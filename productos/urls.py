@@ -22,7 +22,7 @@ urlpatterns = [
     path('productos_bajo_inventario/', views.alertas_bajo_inventario, name='productos_bajo_inventario'),
     path('venta/', views.venta, name='venta'),
     path('crear_venta/', views.crear_venta, name='crear_venta'),
-    path('listar_ventas/', views.listar_ventas, name='listar_venta'),
+    path('listar_ventas/', listar_ventas, name='listar_ventas'),
     
 ]
 

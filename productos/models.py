@@ -46,12 +46,13 @@ class Producto(models.Model):
 #         return f'Transacción: {self.id_producto.nombre} en Venta {self.id_venta.id}'
     
 
+
 class Venta(models.Model):
     id_venta = models.AutoField(primary_key=True)
     fecha_venta = models.DateTimeField(auto_now_add=True)
     finalizada = models.BooleanField(default=False)
     total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    productos = models.TextField()
+    productos = models.TextField(default="[]")  # Puedes ajustar el valor predeterminado según sea necesario
 
     def calcular_total(self):
         transacciones = self.transaccion_set.all()
@@ -60,9 +61,8 @@ class Venta(models.Model):
         self.save()
         return round(total, 2)
 
-    def _str_(self):
+    def __str__(self):
         return f'Venta {self.id_venta}'
-
 class Transaccion(models.Model):
     id_transaccion = models.AutoField(primary_key=True)
     id_producto = models.ForeignKey(Producto, on_delete=models.CASCADE)

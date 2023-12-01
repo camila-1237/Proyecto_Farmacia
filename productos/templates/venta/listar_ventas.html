@@ -26,9 +26,9 @@
                 <tbody>
                     {% for venta in ventas %}
                         <tr>
-                            <td>{{ venta.id }}</td>
-                            <td>{{ venta.fecha }}</td>
-                            <td>{{ venta.estado }}</td>
+                            <td>{{ venta.id_venta }}</td>
+                            <td>{{ venta.fecha_venta }}</td>
+                            <td>{{ venta.finalizada }}</td>
                             <td>{{ venta.total }}</td>
                             <td>
                                 {% for transaccion in venta.productos %}
