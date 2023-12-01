@@ -26,7 +26,6 @@
             <h1>Iniciar Sesión</h1>
             <form method="post" action="{% url 'login' %}">
                 {% csrf_token %}
-                <!-- Campos de inicio de sesión -->
                 <label for="username">Nombre de usuario:</label>
                 <input type="text" id="username" name="username" required><br><br>
                 <label for="password">Contraseña:</label>

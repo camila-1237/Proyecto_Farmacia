@@ -21,7 +21,7 @@
     <h1>Resultados de la búsqueda</h1>
     <table id="tablaProductos">
         <tr>
-            <th>ID Producto</th>  <!-- Add new header for ID Producto -->
+            <th>ID Producto</th>  
             <th>Nombre</th>
             <th>Codigo de barras</th>
             <th>Precio Costo</th>
@@ -34,7 +34,7 @@
         </tr>
         {% for producto in resultados %}
             <tr>
-                <td>{{ producto.id_producto }}</td>  <!-- Add new cell for ID Producto -->
+                <td>{{ producto.id_producto }}</td>  
                 <td>{{ producto.nombre }}</td>
                 <td>{{ producto.codigo_barras }}</td>
                 <td>{{ producto.precio_costo }}</td>

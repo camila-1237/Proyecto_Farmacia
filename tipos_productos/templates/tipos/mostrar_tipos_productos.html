@@ -8,7 +8,6 @@
 <head>
     <title>Tipos de Productos</title>
     <link rel="stylesheet" href="{% static 'css/tablas.css' %}">
-    <!-- Agrega el enlace al archivo JavaScript de SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
@@ -62,11 +61,10 @@
         function eliminarCategoria(event, tipo_id) {
             event.preventDefault();
 
-            // Aquí puedes agregar una verificación si la categoría está asociada a algún producto.
+        
             let confirmacion;
 
-            // Supongamos que la variable 'categoriaAsociada' indica si la categoría está asociada a algún producto.
-            // Puedes ajustar esto según tu lógica real.
+
             let categoriaAsociada = false;
 
             if (categoriaAsociada) {

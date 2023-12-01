@@ -154,7 +154,7 @@
     font-size: 16px;
     margin-left: auto; 
     display: flex;
-    justify-content: flex-end; /* Alinea elementos al extremo derecho */
+    justify-content: flex-end; 
     align-items: center;
     margin-right: 15px
 }

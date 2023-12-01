@@ -4,19 +4,17 @@ from .forms import ProductoForm
 from .models import Producto
 from .models import TipoProducto
 from datetime import datetime
-from django.db.models import Q
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth import logout
-from django.shortcuts import redirect
-from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import JsonResponse
+from .models import Venta, Transaccion
+from .forms import VentaForm
 
 
 
@@ -162,9 +160,6 @@ def venta(request):
     productos = Producto.objects.all()
     return render(request, 'venta/venta.html', {'productos': productos})
 
-from django.shortcuts import render, redirect
-from .models import Venta, Transaccion
-from .forms import VentaForm
 
 def listar_ventas(request):
     ventas = Venta.objects.all()

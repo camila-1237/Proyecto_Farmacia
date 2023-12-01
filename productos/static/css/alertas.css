@@ -5,8 +5,8 @@ h1 {
 }
 
 table {
-    max-width: 900px; /* Ancho máximo de la tabla */
-    margin: 0 auto; /* Margen automático a los lados para centrar la tabla */
+    max-width: 900px; 
+    margin: 0 auto; 
     border-radius: 10px;
     border-collapse: separate;
     border-spacing: 10px;
@@ -30,7 +30,7 @@ th {
     font-family: 'Josefin Sans', sans-serif;
 }
 
-/* Estilos personalizados para SweetAlert2 */
+
 div:where(.swal2-container).swal2-center>.swal2-popup {
     grid-column: 2;
     grid-row: 2;

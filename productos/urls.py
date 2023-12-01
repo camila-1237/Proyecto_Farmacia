@@ -7,9 +7,9 @@ from .views import venta, listar_ventas
 
 
 urlpatterns = [
-    path('', views.login_view, name='login'),  # Página de inicio de sesión como página principal
+    path('', views.login_view, name='login'),  
     path('base/', base, name='hogar'),
-    path('inicio/', index, name='home'),  # Página anterior como página principal después de iniciar sesión
+    path('inicio/', index, name='home'),  
     path('listar/', listar_productos, name='listar_productos'),
     path('registrar/', views.registrar_producto, name='registrar_producto'),
     path('modificar/<int:id>/', login_required(modificar_producto), name='modificar_producto'),
