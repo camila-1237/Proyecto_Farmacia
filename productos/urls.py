@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import listar_productos, registrar_producto, index, modificar_producto, base, eliminar_producto, buscar_productos
+from .views import listar_productos, registrar_producto, informe_ventas, descargar_excel,index, modificar_producto, base, eliminar_producto, buscar_productos
 from . import views
 from django.contrib.auth.decorators import login_required
 from django.urls import path
@@ -23,6 +23,8 @@ urlpatterns = [
     path('venta/', views.venta, name='venta'),
     path('crear_venta/', views.crear_venta, name='crear_venta'),
     path('listar_ventas/', listar_ventas, name='listar_ventas'),
+    path('informe_ventas/', informe_ventas, name='informe_ventas'),
+    path('descargar_excel/', descargar_excel, name='descargar_excel'),
     
 ]
 

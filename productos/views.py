@@ -16,6 +16,37 @@ from django.http import JsonResponse
 from .models import Venta, Transaccion
 from .forms import VentaForm
 
+import json
+from django.http import JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.models import User
+from .forms import ProductoForm
+from .models import Producto, Venta
+from .models import TipoProducto
+from django.db.models import Q
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+from django.shortcuts import render, redirect
+from django.utils import timezone
+from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.utils import timezone
+from django.shortcuts import render
+from django.utils import timezone
+from django.db.models import Q
+from .models import Producto
+
+
+from openpyxl import Workbook
+from openpyxl.styles import Font
+from openpyxl.utils import get_column_letter
+from datetime import datetime, timezone
+
+from django.http import HttpResponse, FileResponse
+
 
 
 def cerrar_sesion(request):
@@ -140,7 +171,6 @@ def alertas_bajo_inventario(request):
             cantidad_inventario__lte=10
         )
 
-      
         fecha_actual = timezone.now()
         fecha_limite = fecha_actual + timezone.timedelta(days=3)
         productos_proximos_a_vencer = Producto.objects.filter(
@@ -153,12 +183,9 @@ def alertas_bajo_inventario(request):
     })
 
 
-from django.shortcuts import render
-from .models import Producto
-
 def venta(request):
-    productos = Producto.objects.all()
-    return render(request, 'venta/venta.html', {'productos': productos})
+   productos = Producto.objects.all()
+   return render(request, 'venta/venta.html', {'productos': productos})
 
 
 def listar_ventas(request):
@@ -192,25 +219,96 @@ def listar_ventas(request):
 
     return render(request, 'venta/listar_ventas.html', {'ventas': listadoVentas})
 
+
 @csrf_exempt
 def crear_venta(request):
+    try:
+        total = float(request.POST.get('total'))
+        productos_json = request.POST.get('productos')
+        productos = json.loads(productos_json)
+
+        Venta.objects.create(
+            finalizada=True,
+            total=total,
+            productos=productos_json,
+        )
+
+        for producto in productos:
+            prd = Producto.objects.get(id_producto=producto["id"])
+            prd.cantidad_inventario -= int(producto["cantidad"])
+            prd.save()
+
+        return JsonResponse({"mensaje": "Exito"})
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
     
-    datos = json.loads(request.body)
+def informe_ventas(request):
+    if request.method == 'POST':
+        fecha_inicio_str = request.POST.get('fecha_inicio')
+        fecha_fin_str = request.POST.get('fecha_fin')
 
-    productos = json.loads(datos["productos"])
+        try:
+            fecha_inicio = datetime.strptime(fecha_inicio_str, '%d/%m/%Y').date()
+            fecha_fin = datetime.strptime(fecha_fin_str, '%d/%m/%Y').date()
+        except ValueError:
+            return HttpResponse("Formato de fecha incorrecto. Utiliza el formato dd/mm/yyyy.")
 
-    Venta.objects.create(
+        if fecha_inicio == fecha_fin:
+            ventas = Venta.objects.filter(fecha_venta__date=fecha_inicio, finalizada=True)
+        else:
+            ventas = Venta.objects.filter(fecha_venta__range=[fecha_inicio, fecha_fin], finalizada=True)
+    else:
+        ventas = Venta.objects.filter(finalizada=True)
 
-        finalizada = True,
-        total = datos["total"],
-        productos = datos["productos"]
+    total_general = 0
+    productos_vendidos = {}
 
-    )
+    workbook = Workbook()
+    worksheet = workbook.active
+    worksheet.title = "Informe de Ventas"
 
-    for i in productos:
+    headers = ["ID Venta", "Total", "Productos Vendidos"]
+    for col_num, header in enumerate(headers, 1):
+        col_letter = get_column_letter(col_num)
+        worksheet[f"{col_letter}1"] = header
+        worksheet[f"{col_letter}1"].font = Font(bold=True)
 
-        prd = Producto.objects.get(id_producto = i["id"])
-        prd.cantidad_inventario -= i["cantidad"]
-        prd.save()
+    for row_num, venta in enumerate(ventas, 2):
+        productos = json.loads(venta.productos)
 
-    return JsonResponse({"mensaje": "Exito"})
+        for p in productos:
+            nombre_producto = p["nombre"]
+            cantidad_vendida = p["cantidad"]
+
+            producto = Producto.objects.get(nombre=nombre_producto)
+            precio_producto = producto.precio_venta
+
+            total_producto = precio_producto * cantidad_vendida
+
+            total_general += total_producto
+
+            if nombre_producto in productos_vendidos:
+                productos_vendidos[nombre_producto] += cantidad_vendida
+            else:
+                productos_vendidos[nombre_producto] = cantidad_vendida
+
+        fecha_venta_excel = venta.fecha_venta.astimezone(timezone.utc).replace(tzinfo=None)
+
+        worksheet.append([venta.id_venta, venta.total, json.dumps(productos)])
+
+    excel_file_path = "informe_ventas.xlsx"
+    workbook.save(excel_file_path)
+
+    context = {'total_general': total_general, 'productos_vendidos': productos_vendidos, 'excel_file_path': excel_file_path}
+
+    return render(request, 'venta/informe_ventas.html', context)
+
+
+def descargar_excel(request):
+    excel_file_path = "informe_ventas.xlsx"
+
+    response = FileResponse(open(excel_file_path, 'rb'))
+    response['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    response['Content-Disposition'] = f'attachment; filename="{excel_file_path}"'
+
+    return response

@@ -13,8 +13,8 @@
         <input type="text" id="buscador" placeholder="Buscar producto">
         <ul id="lista-productos">
             {% for producto in productos %}
-                <li class="producto" data-id="{{ producto.id_producto }}" data-precio="{{ producto.precio }}">
-                    {{ producto.nombre }} - ${{ producto.precio }}
+                <li class="producto" data-id="{{ producto.id_producto }}" data-precio_venta="{{ producto.precio_venta }}">
+                    {{ producto.nombre }} - ${{ producto.precio_venta }}
                 </li>
             {% endfor %}
         </ul>

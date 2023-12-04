@@ -1,23 +1,21 @@
-const listaProductosVenta = []
+const listaProductosVenta = [];
 
 document.addEventListener('DOMContentLoaded', function() {
     const buscador = document.getElementById('buscador');
     const listaProductos = document.getElementById('lista-productos');
-    const productos = document.querySelectorAll(".producto")
+    const productos = document.querySelectorAll(".producto");
     const editarModalBtn = document.getElementById('editar-modal');
 
     const modalNombre = document.getElementById('modal-nombre');
     const modalPrecio = document.getElementById('modal-precio');
     const modalCantidad = document.getElementById('modal-cantidad');
-    const valorPago = document.getElementById("pago")
+    const valorPago = document.getElementById("pago");
     const agregarModalBtn = document.getElementById('agregar-modal');
 
-    const realizarVenta = document.getElementById("finalizar")
+    const realizarVenta = document.getElementById("finalizar");
 
-    const totalTodo = document.getElementById("transaccion")
-    const prds = document.getElementById("total")
-
-    let productoEditado = null;
+    const totalTodo = document.getElementById("transaccion");
+    const prds = document.getElementById("total");
 
     buscador.addEventListener('input', function() {
         const filtro = this.value.toLowerCase();
@@ -33,16 +31,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    let id = 0
-
     productos.forEach(prd => {
-
-        prd.addEventListener("click", (e) => {
-
+        prd.addEventListener("click", () => {
             const nombre = prd.textContent.split(' - ')[0];
             const precio = parseFloat(prd.dataset.precio);
 
-            id = e.target.attributes[1].value
             modalNombre.textContent = nombre;
             modalPrecio.textContent = `$${precio.toFixed(2)}`;
             modalCantidad.value = '1';
@@ -51,20 +44,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const modal = document.getElementById('modal');
             modal.style.display = 'block';
-
-        })
-
-    })
-
-    function borrar(id){
-
-        const lista = JSON.parse(localStorage.getItem("productos"))
-
-        const nuevaLista = lista.slice(id, 1)
-    
-        console.log(id)
-
-    }
+        });
+    });
 
     agregarModalBtn.addEventListener('click', () => {
         const cantidad = parseInt(modalCantidad.value);
@@ -73,41 +54,57 @@ document.addEventListener('DOMContentLoaded', function() {
             modal.style.display = 'none';
             modalCantidad.value = '1';
 
-            const nombreConvertido = modalNombre.textContent.trim()
-            const precioConvertido = modalPrecio.textContent.split("$")
+            const nombreConvertido = modalNombre.textContent.trim();
+            const precioConvertido = modalPrecio.textContent.split("$");
 
             listaProductosVenta.push({
-
-                id: id,
                 nombre: nombreConvertido,
                 cantidad: cantidad,
                 precio: parseFloat(precioConvertido[1]) * cantidad
+            });
 
-            })
+            localStorage.setItem("productos", JSON.stringify(listaProductosVenta));
 
-            localStorage.setItem("productos", JSON.stringify(listaProductosVenta))
+            let productos = JSON.parse(localStorage.getItem("productos"));
 
-            let productos = JSON.parse(localStorage.getItem("productos"))
+            let total = 0;
 
-            let total = 0
-            
-            prds.innerHTML = "<p> </p>"
+            prds.innerHTML = "<p> </p>";
 
-            for (let i in productos){
-
+            for (let i in productos) {
                 prds.innerHTML += `
-                
-                    <span> Nombre:  ${productos[i].nombre} - Cantidad: ${productos[i].cantidad} </span> 
-                    <button> X </button> <br>
-                
+                    <span> Nombre: ${productos[i].nombre} - Cantidad: ${productos[i].cantidad} </span>
+                    <button class="eliminar-producto" data-id="${i}"> X </button> <br>
                 `
                 total += productos[i].precio
-    
             }
-    
+
             totalTodo.textContent = `Total: $${total.toFixed(2)}`;
+        }
+    });
 
+    prds.addEventListener('click', (e) => {
+        if (e.target.classList.contains('eliminar-producto')) {
+            const index = parseInt(e.target.dataset.id);
+            listaProductosVenta.splice(index, 1);
 
+            localStorage.setItem("productos", JSON.stringify(listaProductosVenta));
+
+            let productos = JSON.parse(localStorage.getItem("productos"));
+
+            let total = 0;
+
+            prds.innerHTML = "<p> </p>";
+
+            for (let i in productos) {
+                prds.innerHTML += `
+                    <span> Nombre: ${productos[i].nombre} - Cantidad: ${productos[i].cantidad} </span>
+                    <button class="eliminar-producto" data-id="${i}"> X </button> <br>
+                `
+                total += productos[i].precio
+            }
+
+            totalTodo.textContent = `Total: $${total.toFixed(2)}`;
         }
     });
 
@@ -116,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (event.target.classList.contains('cantidad-btn')) {
             const buttonValue = event.target.textContent;
 
-            
+            // Limpiar el campo de cantidad antes de agregar el nuevo valor
             const modalCantidad = document.getElementById('modal-cantidad');
             modalCantidad.value = buttonValue;
         }
@@ -129,50 +126,29 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     realizarVenta.addEventListener("click", async (e) => {
-
-        e.preventDefault()
-
-        const productosLocalStorage = JSON.parse(localStorage.getItem("productos"))
-
-        let totalVenta = 0
-
-        for (let i of productosLocalStorage){
-
-            totalVenta += i.precio
-
-        }
-
-        if(parseInt(valorPago.value) >= totalVenta){
-
+        e.preventDefault();
+    
+        const productosLocalStorage = JSON.parse(localStorage.getItem("productos"));
+        const totalVenta = productosLocalStorage.reduce((total, producto) => total + producto.precio, 0);
+    
+        if (parseInt(valorPago.value) >= totalVenta) {
+            const formData = new FormData();
+            formData.append('total', totalVenta);
+            formData.append('productos', JSON.stringify(productosLocalStorage));
+    
             const peticion = await fetch("http://localhost:8000/crear_venta/", {
-
                 method: 'POST',
-                body: JSON.stringify({
-
-                    total: totalVenta,
-                    productos: localStorage.getItem("productos")
-
-                }),
-                headers: {"content-type": "application/json"}
-
-            })
-
-            await peticion.json()
-
+                body: formData,
+            });
+    
+            await peticion.json();
+    
             alert(`Cambio: ${parseInt(valorPago.value) - totalVenta}`);
-
-
-            localStorage.removeItem("productos")
-
-        }else{
-
+            localStorage.removeItem("productos");
+            } else {
             alert(`Faltan: ${totalVenta - parseInt(valorPago.value)}`);
-
-            localStorage.removeItem("productos")
+            localStorage.removeItem("productos");
 
         }
-
-    })
-
-
+    });
 });

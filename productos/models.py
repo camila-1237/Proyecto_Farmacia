@@ -41,7 +41,7 @@ class Transaccion(models.Model):
     finalizada = models.BooleanField(default=False)
     
     def calcular_subtotal(self):
-        return self.cantidad * self.id_producto.precio
+        return self.cantidad * self.id_producto.precio_venta
 
     def detalles_producto_vendido(self):
         return f'{self.id_producto.nombre} - Cantidad: {self.cantidad}'

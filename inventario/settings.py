@@ -136,4 +136,6 @@ CORS_ALLOW_HEADERS = [
     'X-CSRFToken',
 ]
 
-
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:your_frontend_port",  # Reemplaza "your_frontend_port" con el puerto real de tu aplicación front-end
+]

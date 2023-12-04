@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Informes Ventas</title>
+    <link rel="stylesheet" href="{% static 'css/informes.css' %}">
+</head>
+<body>
+    {% include 'index.html' %}
+    <div class="content">
+        {% block content %}
+            <h1>Informe de Ventas</h1>
+
+            <form method="post" action="{% url 'informe_ventas' %}">
+                {% csrf_token %}
+                <label for="fecha_inicio">Fecha de Inicio:</label>
+                <input type="text" id="fecha_inicio" name="fecha_inicio" placeholder="dd/mm/yyyy" required>
+            
+                <label for="fecha_fin">Fecha de Fin:</label>
+                <input type="text" id="fecha_fin" name="fecha_fin" placeholder="dd/mm/yyyy" required>
+            
+                <button type="submit">Generar Informe</button>
+            </form>
+        
+            <h2>Total General de Ventas: ${{ total_general }}</h2>
+        
+            <h3>Productos Vendidos:</h3>
+            <ul>
+                {% for producto, cantidad_vendida in productos_vendidos.items %}
+                    <li>{{ producto }} - Cantidad Vendida: {{ cantidad_vendida }}</li>
+                {% endfor %}
+            </ul>
+
+            {% if excel_file_path %}
+                <p>Descargar informe en Excel: <a href="{% url 'descargar_excel' %}" download>Descargar Excel</a></p>
+            {% endif %}
+            <script>
+                function eliminarProducto(event) {
+                    event.preventDefault();
+        
+                    Swal.fire({
+                        title: '¿Estás seguro de que deseas eliminar este producto?',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sí, Eliminar',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById('eliminarForm').submit();
+                        }
+                    });
+                }
+                const tablaProductos = document.getElementById('tablaProductos');
+                const contenidoTabla = document.getElementById('contenidoTabla');
+                const mostrarNavegacion = document.getElementById('mostrarNavegacion');
+                const navegacion = document.getElementById('navegador');
+        
+                navegacion.style.width = '150px';
+                tablaProductos.style.width = '90%';
+        
+                mostrarNavegacion.addEventListener('click', function (event) {
+                    event.preventDefault();
+        
+                    if (navegacion.style.width === '150px') {
+                        navegacion.style.width = '0';
+                        tablaProductos.style.width = '100%';
+                        tablaProductos.classList.remove('tabla-navegacion-abierta');
+                        contenidoTabla.classList.remove('tabla-navegacion-abierta');
+                    } else {
+                        navegacion.style.width = '150px';
+                        tablaProductos.style.width = 'calc(100% - 150px)';
+                        tablaProductos.classList.add('tabla-navegacion-abierta');
+                        contenidoTabla.classList.add('tabla-navegacion-abierta');
+                    }
+                });
+            </script>
+        {% endblock %}
+    </div>
+</body>
+</html>
