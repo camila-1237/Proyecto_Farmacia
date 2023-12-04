@@ -15,31 +15,8 @@ import json
 from django.http import JsonResponse
 from .models import Venta, Transaccion
 from .forms import VentaForm
-
-import json
-from django.http import JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from .forms import ProductoForm
 from .models import Producto, Venta
-from .models import TipoProducto
-from django.db.models import Q
-from django.contrib.auth import authenticate, login
-from django.contrib import messages
-from django.contrib.auth import logout
-from django.shortcuts import redirect
-from django.shortcuts import render, redirect
-from django.utils import timezone
-from django.db.models import Q
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-from django.utils import timezone
-from django.shortcuts import render
-from django.utils import timezone
-from django.db.models import Q
-from .models import Producto
-
-
 from openpyxl import Workbook
 from openpyxl.styles import Font
 from openpyxl.utils import get_column_letter
