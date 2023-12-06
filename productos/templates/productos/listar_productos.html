@@ -13,39 +13,58 @@
     {% include 'index.html' %}
     <style>
         #tablaProductos {
-            width: 100%; /* Establece el ancho en 100% para ocupar todo el espacio disponible */
-            transition: width 0.3s; /* Mantén la transición para un efecto suave */
+            width: 100%;
+            transition: width 0.3s;
         }
+        #verMasContainer { 
+            display: flex; 
+            justify-content: center; 
+            margin-top: 10px;
+            border-radius: 15px;
+            
+        }
+        #verMasBtn {
+        background-color: black;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 15px;
+        cursor: pointer;
+    }
     </style>
 
     <h1>Listado de Productos</h1>
 
     <table id="tablaProductos">
         <tr>
-            <th>ID Producto</th> 
+            <th>ID Producto</th>
             <th>Nombre</th>
-            <th>Precio Costo</th>  
-            <th>Precio Venta</th>  
-            <th>Precio Mayor</th>  
-            <th>Inventario</th>  
-            <th>Inventario Mínimo</th>  
-            <th>Categoria</th> 
+            <th>Precio Costo</th>
+            <th>Precio Venta</th>
+            <th>Precio Mayor</th>
+            <th>Inventario</th>
+            <th>Inventario Mínimo</th>
+            <th>Categoria</th>
             <th>Detalles</th>
         </tr>
         {% for producto in productos %}
-            <tr>
-                <td>{{ producto.id_producto }}</td> 
-                <td>{{ producto.nombre }}</td>
-                <td>${{ producto.precio_costo }}</td>  
-                <td>${{ producto.precio_venta }}</td>  
-                <td>${{ producto.precio_mayor }}</td>  
-                <td>{{ producto.cantidad_inventario }}</td>
-                <td>{{ producto.inventario_minimo }}</td>  
-                <td>{{ producto.tipo.nombre }}</td>
-                <td><a href="{% url 'detalle_producto' producto.id_producto %}" style="text-decoration: none;">👁️</a></td>
-            </tr>
+        <tr class="producto-fila">
+            <td>{{ producto.id_producto }}</td>
+            <td>{{ producto.nombre }}</td>
+            <td>${{ producto.precio_costo }}</td>
+            <td>${{ producto.precio_venta }}</td>
+            <td>${{ producto.precio_mayor }}</td>
+            <td>{{ producto.cantidad_inventario }}</td>
+            <td>{{ producto.inventario_minimo }}</td>
+            <td>{{ producto.tipo.nombre }}</td>
+            <td><a href="{% url 'detalle_producto' producto.id_producto %}" style="text-decoration: none;">👁️</a></td>
+        </tr>
         {% endfor %}
     </table>
+
+    <div id="verMasContainer">
+        <button id="verMasBtn">Ver más</button>
+    </div>      
 
     <div id="formularioBusqueda">
         <form action="{% url 'buscar_productos' %}" method="get">
@@ -55,6 +74,32 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const productos = document.querySelectorAll('.producto-fila');
+            const verMasBtn = document.getElementById('verMasBtn');
+            const productosPorPagina = 20;
+            let productosVisible = productosPorPagina;
+
+            function actualizarVisibilidadProductos() {
+                productos.forEach((producto, index) => {
+                    if (index < productosVisible) {
+                        producto.style.display = 'table-row';
+                    } else {
+                        producto.style.display = 'none';
+                    }
+                });
+            }
+
+            actualizarVisibilidadProductos();
+
+            verMasBtn.addEventListener('click', function (event) {
+                event.preventDefault(); // Prevenir que la página se desplace hacia arriba
+
+                productosVisible += productosPorPagina;
+                actualizarVisibilidadProductos();
+            });
+        });
+        
         function eliminarProducto(event) {
             event.preventDefault();
 
@@ -93,6 +138,7 @@
             }
         });
     </script>
+
 </body>
 
 </html>
