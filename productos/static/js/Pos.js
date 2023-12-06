@@ -145,10 +145,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
             alert(`Cambio: ${parseInt(valorPago.value) - totalVenta}`);
             localStorage.removeItem("productos");
-            } else {
+        } else {
             alert(`Faltan: ${totalVenta - parseInt(valorPago.value)}`);
             localStorage.removeItem("productos");
-
         }
     });
 });

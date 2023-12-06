@@ -22,6 +22,7 @@ from openpyxl.styles import Font
 from openpyxl.utils import get_column_letter
 from datetime import datetime, timezone
 
+
 from django.http import HttpResponse, FileResponse
 
 
